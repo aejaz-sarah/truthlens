@@ -1,0 +1,9 @@
+**/node_modules/
+**/dist/
+**/.venv/
+**/__pycache__/
+**/*.py[cod]
+ml-service/model.joblib
+backend/.env
+
+ml-service/liar_dataset_source/
