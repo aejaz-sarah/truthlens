@@ -50,6 +50,18 @@ npm run dev
 
 Open the Vite URL shown in the terminal (normally `http://localhost:5173`).
 
+## Deploy all three services on Vercel
+
+The root `vercel.json` keeps the frontend, Express API, and Flask model service in one Vercel Services deployment. Set the Vercel project's **Root Directory** to this `truthlens` folder and its **Framework Preset** to **Services**. Vercel Services must be enabled for the account/project.
+
+- The `frontend` service is public at `/` and receives all paths except `/api/*`.
+- The `backend` service is public at `/api/*` and keeps the existing Express API paths.
+- The `ml-service` service is internal only. The backend calls it through the `ML_SERVICE_URL` binding injected by Vercel.
+
+The browser calls `/api` on the same deployment domain, so it does not need a frontend-to-backend binding or a production API hostname. The trained `model.joblib` is alongside `app.py` in the Flask service root. Do not add `ML_SERVICE_URL` manually to Vercel's environment settings; the binding supplies it at function runtime.
+
+The Flask service pins Python 3.12 in `ml-service/.python-version` and pins NumPy, SciPy, scikit-learn, and joblib to match the model's training environment. Keep those versions aligned with the saved model when retraining or changing deployment dependencies.
+
 ## API
 
 - `GET /api/health` returns Express status and whether Flask has a model loaded.
